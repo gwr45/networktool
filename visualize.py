@@ -171,8 +171,11 @@ def visualize(result_id):
     return buf
 
 def save_all():
-    if not os.path.exists("visuals"):
-        os.mkdir("visuals")
+    # Use /tmp for writable storage in serverless environments
+    tmp_dir = "/tmp/visuals"
+    if not os.path.exists(tmp_dir):
+        os.makedirs(tmp_dir)
+        
     print("Downloading questionnaire data...")
     result_csv = file_utils.download_csv(constants.RESULTS_DOWNLOAD_CSV)
     reader = csv.reader(open(result_csv, 'r'))
@@ -182,10 +185,12 @@ def save_all():
             pass
         print("Generating visual for {}".format(row[2]))
         buf = visualize(row[0])
-        with open('visuals/{}.png'.format(row[2].replace(' ', '_')), 'w') as f:
+        safe_filename = row[2].replace(' ', '_')
+        with open(os.path.join(tmp_dir, f'{safe_filename}.png'), 'w') as f:
             buf.seek(0)
             shutil.copyfileobj(buf, f)
-    shutil.rmtree('tmp')
+    # No need to remove tmp as it is ephemeral in lambda, but good practice if persistent
+    # shutil.rmtree(tmp_dir)
 
 def send_viz_email(buf, name):
     """ Sends email of someone's visualization. """

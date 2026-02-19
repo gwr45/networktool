@@ -1,4 +1,5 @@
-LOCAL_DB_PATH = 'sqlite:///network.db'
+# Use /tmp for SQLite in serverless environments
+LOCAL_DB_PATH = 'sqlite:////tmp/network.db'
 
 QUESTIONNAIRE_FIELD_LIST = [
     "name",
