@@ -1,0 +1,384 @@
+<html>
+
+<head>
+  <title>Results: {{ result.name }} — Ezra's Network</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/index.css" />
+</head>
+
+<body>
+  <div class="nav">
+    <div class="nav-logo">
+      <span class="dot">E</span>
+      <h1>Ezra's Network Visualize</h1>
+    </div>
+    <div class="nav-links">
+      <a href="/" class="nav-link">Survey</a>
+      <a href="/backend" class="nav-link">Admin</a>
+    </div>
+  </div>
+
+  <div class="container" id="container" style="padding-top:var(--sp-8); padding-bottom:var(--sp-16);">
+
+    <p class="spaced" style="margin-left:0;">The table below compares your network metrics to classmates and
+      professional benchmarks. <span class="greater" style="padding:2px 8px; border-radius:4px;">Green</span> = above
+      class average, <span class="less" style="padding:2px 8px; border-radius:4px;">Red</span> = below.</p>
+
+    <!-- ── Structure Metrics ────────────────────────────── -->
+    <h3 class="card-section-title" style="display:block;">📊 Network Structure</h3>
+    <div class="card" style="margin-bottom:var(--sp-8); overflow-x:auto;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Measure</th>
+            <th>Your Class Avg</th>
+            <th>Tech MBA '15</th>
+            <th>Tech MBA '14</th>
+            <th>Sr. Executives</th>
+            <th>Full-Time MBA</th>
+            <th>Your Network</th>
+          </tr>
+        </thead>
+        <tbody class="stagger">
+          <tr>
+            <td>Number of Ties</td>
+            <td>{{ avgs.class_average.numTies|round(1) }}</td>
+            <td>{{ avgs.tech_mba_2015.numTies }}</td>
+            <td>{{ avgs.tech_mba_2014.numTies }}</td>
+            <td>{{ avgs.senior_execs.numTies }}</td>
+            <td>{{ avgs.full_time_mba.numTies }}</td>
+            <td class="{% if result.numTies > avgs.class_average.numTies %}greater{% else %}less{% endif %}">{{
+              result.numTies|round(1) }}</td>
+          </tr>
+          <tr>
+            <td>Network Density</td>
+            <td>{{ (avgs.class_average.netDensity*100)|round(1) }}%</td>
+            <td>{{ avgs.tech_mba_2015.netDensity*100 }}%</td>
+            <td>{{ avgs.tech_mba_2014.netDensity*100 }}%</td>
+            <td>{{ avgs.senior_execs.netDensity*100 }}%</td>
+            <td>{{ avgs.full_time_mba.netDensity*100 }}%</td>
+            <td class="{% if result.netDensity > avgs.class_average.netDensity %}greater{% else %}less{% endif %}">{{
+              (result.netDensity*100)|round(1) }}%</td>
+          </tr>
+          <tr>
+            <td>Higher rank than you</td>
+            <td>{{ (avgs.class_average.higherRank*100)|round(1) }}%</td>
+            <td>{{ avgs.tech_mba_2015.higherRank*100 }}%</td>
+            <td>{{ avgs.tech_mba_2014.higherRank*100 }}%</td>
+            <td>{{ avgs.senior_execs.higherRank*100 }}%</td>
+            <td>{{ avgs.full_time_mba.higherRank*100 }}%</td>
+            <td class="{% if result.higherRank > avgs.class_average.higherRank %}greater{% else %}less{% endif %}">{{
+              (result.higherRank*100)|round(1) }}%</td>
+          </tr>
+          <tr>
+            <td>Same rank as you</td>
+            <td>{{ (avgs.class_average.sameRank*100)|round(1) }}%</td>
+            <td>{{ avgs.tech_mba_2015.sameRank*100 }}%</td>
+            <td>{{ avgs.tech_mba_2014.sameRank*100 }}%</td>
+            <td>{{ avgs.senior_execs.sameRank*100 }}%</td>
+            <td>{{ avgs.full_time_mba.sameRank*100 }}%</td>
+            <td class="{% if result.sameRank > avgs.class_average.sameRank %}greater{% else %}less{% endif %}">{{
+              (result.sameRank*100)|round(1) }}%</td>
+          </tr>
+          <tr>
+            <td>Lower rank than you</td>
+            <td>{{ (avgs.class_average.lowerRank*100)|round(1) }}%</td>
+            <td>{{ avgs.tech_mba_2015.lowerRank*100 }}%</td>
+            <td>{{ avgs.tech_mba_2014.lowerRank*100 }}%</td>
+            <td>{{ avgs.senior_execs.lowerRank*100 }}%</td>
+            <td>{{ avgs.full_time_mba.lowerRank*100 }}%</td>
+            <td class="{% if result.lowerRank > avgs.class_average.lowerRank %}greater{% else %}less{% endif %}">{{
+              (result.lowerRank*100)|round(1) }}%</td>
+          </tr>
+          <tr>
+            <td>Not in your organization</td>
+            <td>{{ (avgs.class_average.notInOrg*100)|round(1) }}%</td>
+            <td>{{ avgs.tech_mba_2015.notInOrg*100 }}%</td>
+            <td>{{ avgs.tech_mba_2014.notInOrg*100 }}%</td>
+            <td>{{ avgs.senior_execs.notInOrg*100 }}%</td>
+            <td>{{ avgs.full_time_mba.notInOrg*100 }}%</td>
+            <td class="{% if result.notInOrg > avgs.class_average.notInOrg %}greater{% else %}less{% endif %}">{{
+              (result.notInOrg*100)|round(1) }}%</td>
+          </tr>
+          <tr>
+            <td>In your unit</td>
+            <td>{{ (avgs.class_average.yourUnit*100)|round(1) }}%</td>
+            <td>{{ avgs.tech_mba_2015.yourUnit*100 }}%</td>
+            <td>{{ avgs.tech_mba_2014.yourUnit*100 }}%</td>
+            <td>{{ avgs.senior_execs.yourUnit*100 }}%</td>
+            <td>{{ avgs.full_time_mba.yourUnit*100 }}%</td>
+            <td class="{% if result.yourUnit > avgs.class_average.yourUnit %}greater{% else %}less{% endif %}">{{
+              (result.yourUnit*100)|round(1) }}%</td>
+          </tr>
+          <tr>
+            <td>% very close ties</td>
+            <td>{{ (avgs.class_average.veryCloseTies*100)|round(1) }}%</td>
+            <td>{{ avgs.tech_mba_2015.veryCloseTies*100 }}%</td>
+            <td>{{ avgs.tech_mba_2014.veryCloseTies*100 }}%</td>
+            <td>{{ avgs.senior_execs.veryCloseTies*100 }}%</td>
+            <td>{{ avgs.full_time_mba.veryCloseTies*100 }}%</td>
+            <td
+              class="{% if result.veryCloseTies > avgs.class_average.veryCloseTies %}greater{% else %}less{% endif %}">
+              {{ (result.veryCloseTies*100)|round(1) }}%</td>
+          </tr>
+          <tr>
+            <td>% close ties</td>
+            <td>{{ (avgs.class_average.closeTies*100)|round(1) }}%</td>
+            <td>{{ avgs.tech_mba_2015.closeTies*100 }}%</td>
+            <td>{{ avgs.tech_mba_2014.closeTies*100 }}%</td>
+            <td>{{ avgs.senior_execs.closeTies*100 }}%</td>
+            <td>{{ avgs.full_time_mba.closeTies*100 }}%</td>
+            <td class="{% if result.closeTies > avgs.class_average.closeTies %}greater{% else %}less{% endif %}">{{
+              (result.closeTies*100)|round(1) }}%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── Resources ────────────────────────────────────── -->
+    <h3 class="card-section-title" style="display:block;">💰 Resources</h3>
+    <div class="card" style="margin-bottom:var(--sp-8); overflow-x:auto;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Measure</th>
+            <th>Your Class Avg</th>
+            <th>Tech MBA '15</th>
+            <th>Tech MBA '14</th>
+            <th>Sr. Executives</th>
+            <th>Full-Time MBA</th>
+            <th>Your Network</th>
+          </tr>
+        </thead>
+        <tbody class="stagger">
+          <tr>
+            <td>Economic resources</td>
+            <td>{{ (avgs.class_average.econResources*100)|round(1) }}%</td>
+            <td>{{ avgs.tech_mba_2015.econResources*100 }}%</td>
+            <td>{{ avgs.tech_mba_2014.econResources*100 }}%</td>
+            <td>{{ avgs.senior_execs.econResources*100 }}%</td>
+            <td>{{ avgs.full_time_mba.econResources*100 }}%</td>
+            <td
+              class="{% if result.econResources > avgs.class_average.econResources %}greater{% else %}less{% endif %}">
+              {{ (result.econResources*100)|round(1) }}%</td>
+          </tr>
+          <tr>
+            <td>Career information</td>
+            <td>{{ (avgs.class_average.careerResources*100)|round(1) }}%</td>
+            <td>{{ avgs.tech_mba_2015.careerResources*100 }}%</td>
+            <td>{{ avgs.tech_mba_2014.careerResources*100 }}%</td>
+            <td>{{ avgs.senior_execs.careerResources*100 }}%</td>
+            <td>{{ avgs.full_time_mba.careerResources*100 }}%</td>
+            <td
+              class="{% if result.careerResources > avgs.class_average.careerResources %}greater{% else %}less{% endif %}">
+              {{ (result.careerResources*100)|round(1) }}%</td>
+          </tr>
+          <tr>
+            <td>Task execution help</td>
+            <td>{{ (avgs.class_average.getThingsDoneResources*100)|round(1) }}%</td>
+            <td>{{ avgs.tech_mba_2015.getThingsDoneResources*100 }}%</td>
+            <td>{{ avgs.tech_mba_2014.getThingsDoneResources*100 }}%</td>
+            <td>{{ avgs.senior_execs.getThingsDoneResources*100 }}%</td>
+            <td>{{ avgs.full_time_mba.getThingsDoneResources*100 }}%</td>
+            <td
+              class="{% if result.getThingsDoneResources > avgs.class_average.getThingsDoneResources %}greater{% else %}less{% endif %}">
+              {{ (result.getThingsDoneResources*100)|round(1) }}%</td>
+          </tr>
+          <tr>
+            <td>Social benefits</td>
+            <td>{{ (avgs.class_average.socialResources*100)|round(1) }}%</td>
+            <td>{{ avgs.tech_mba_2015.socialResources*100 }}%</td>
+            <td>{{ avgs.tech_mba_2014.socialResources*100 }}%</td>
+            <td>{{ avgs.senior_execs.socialResources*100 }}%</td>
+            <td>{{ avgs.full_time_mba.socialResources*100 }}%</td>
+            <td
+              class="{% if result.socialResources > avgs.class_average.socialResources %}greater{% else %}less{% endif %}">
+              {{ (result.socialResources*100)|round(1) }}%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── Trust & Obligation ───────────────────────────── -->
+    <h3 class="card-section-title" style="display:block;">🤝 Trust &amp; Obligation</h3>
+    <div class="card" style="margin-bottom:var(--sp-8); overflow-x:auto;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Measure</th>
+            <th>Your Class Avg</th>
+            <th>Tech MBA '15</th>
+            <th>Tech MBA '14</th>
+            <th>Sr. Executives</th>
+            <th>Full-Time MBA</th>
+            <th>Your Network</th>
+          </tr>
+        </thead>
+        <tbody class="stagger">
+          <tr>
+            <td>Emotional trust (1–5)</td>
+            <td>{{ avgs.class_average.emotionalTrust|round(1) }}</td>
+            <td>{{ avgs.tech_mba_2015.emotionalTrust }}</td>
+            <td>{{ avgs.tech_mba_2014.emotionalTrust }}</td>
+            <td>{{ avgs.senior_execs.emotionalTrust }}</td>
+            <td>{{ avgs.full_time_mba.emotionalTrust }}</td>
+            <td
+              class="{% if result.emotionalTrust > avgs.class_average.emotionalTrust %}greater{% else %}less{% endif %}">
+              {{ result.emotionalTrust|round(1) }}</td>
+          </tr>
+          <tr>
+            <td>Follow-through trust (1–5)</td>
+            <td>{{ avgs.class_average.getThingsDoneTrust|round(1) }}</td>
+            <td>{{ avgs.tech_mba_2015.getThingsDoneTrust }}</td>
+            <td>{{ avgs.tech_mba_2014.getThingsDoneTrust }}</td>
+            <td>{{ avgs.senior_execs.getThingsDoneTrust }}</td>
+            <td>{{ avgs.full_time_mba.getThingsDoneTrust }}</td>
+            <td
+              class="{% if result.getThingsDoneTrust > avgs.class_average.getThingsDoneTrust %}greater{% else %}less{% endif %}">
+              {{ result.getThingsDoneTrust|round(1) }}</td>
+          </tr>
+          <tr>
+            <td>Felt obligation (1–5)</td>
+            <td>{{ avgs.class_average.obligation|round(1) }}</td>
+            <td>{{ avgs.tech_mba_2015.obligation }}</td>
+            <td>{{ avgs.tech_mba_2014.obligation }}</td>
+            <td>{{ avgs.senior_execs.obligation }}</td>
+            <td>{{ avgs.full_time_mba.obligation }}</td>
+            <td class="{% if result.obligation > avgs.class_average.obligation %}greater{% else %}less{% endif %}">{{
+              result.obligation|round(1) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── Self-Assessment & Diversity ──────────────────── -->
+    <h3 class="card-section-title" style="display:block;">🌍 Self-Assessment &amp; Diversity</h3>
+    <div class="card" style="margin-bottom:var(--sp-8); overflow-x:auto;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Measure</th>
+            <th>Your Class Avg</th>
+            <th>Your Network</th>
+          </tr>
+        </thead>
+        <tbody class="stagger">
+          <tr>
+            <td>Access to elite contacts</td>
+            <td>{{ avgs.class_average.eliteNetwork|round(1) }}</td>
+            <td class="{% if result.eliteNetwork > avgs.class_average.eliteNetwork %}greater{% else %}less{% endif %}">
+              {{ result.eliteNetwork }}</td>
+          </tr>
+          <tr>
+            <td>Access to technical advice</td>
+            <td>{{ avgs.class_average.technicalNetwork|round(1) }}</td>
+            <td
+              class="{% if result.technicalNetwork > avgs.class_average.technicalNetwork %}greater{% else %}less{% endif %}">
+              {{ result.technicalNetwork }}</td>
+          </tr>
+          <tr>
+            <td>Guidance for new venture</td>
+            <td>{{ avgs.class_average.guidanceNetwork|round(1) }}</td>
+            <td
+              class="{% if result.guidanceNetwork > avgs.class_average.guidanceNetwork %}greater{% else %}less{% endif %}">
+              {{ result.guidanceNetwork }}</td>
+          </tr>
+          <tr>
+            <td>Financial resources for venture</td>
+            <td>{{ avgs.class_average.financialNetwork|round(1) }}</td>
+            <td
+              class="{% if result.financialNetwork > avgs.class_average.financialNetwork %}greater{% else %}less{% endif %}">
+              {{ result.financialNetwork }}</td>
+          </tr>
+          <tr>
+            <td>% different nationality</td>
+            <td>{{ (avgs.class_average.differentNationality*100)|round(1) }}%</td>
+            <td
+              class="{% if result.differentNationality > avgs.class_average.differentNationality %}greater{% else %}less{% endif %}">
+              {{ (result.differentNationality*100)|round(1) }}%</td>
+          </tr>
+          <tr>
+            <td>% different race</td>
+            <td>{{ (avgs.class_average.diffRace*100)|round(1) }}%</td>
+            <td class="{% if result.diffRace > avgs.class_average.diffRace %}greater{% else %}less{% endif %}">{{
+              (result.diffRace*100)|round(1) }}%</td>
+          </tr>
+          <tr>
+            <td>% related to you</td>
+            <td>{{ (avgs.class_average.percentRelated*100)|round(1) }}%</td>
+            <td
+              class="{% if result.percentRelated > avgs.class_average.percentRelated %}greater{% else %}less{% endif %}">
+              {{ (result.percentRelated*100)|round(1) }}%</td>
+          </tr>
+          <tr>
+            <td>% from different universities</td>
+            <td>{{ (avgs.class_average.differentUniversity*100)|round(1) }}%</td>
+            <td
+              class="{% if result.differentUniversity > avgs.class_average.differentUniversity %}greater{% else %}less{% endif %}">
+              {{ (result.differentUniversity*100)|round(1) }}%</td>
+          </tr>
+          <tr>
+            <td>Average degrees held by ties</td>
+            <td>{{ (avgs.class_average.numDegrees)|round(1) }}</td>
+            <td class="{% if result.numDegrees > avgs.class_average.numDegrees %}greater{% else %}less{% endif %}">{{
+              (result.numDegrees)|round(1) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── Interactive Network Graph ─────────────────────── -->
+    <h3 class="card-section-title" style="display:block;">🕸️ Your Network Graph</h3>
+    <div id="network-graph" class="card"
+      style="margin-bottom:var(--sp-8); min-height:500px; padding:0; overflow:hidden;">
+    </div>
+    <script id="graph-data" type="application/json">{{ graph_data_json | default('{}') | safe }}</script>
+    <script src="/static/js/lib/NetworkGraph.js"></script>
+    <script>
+      (function () {
+        var dataEl = document.getElementById('graph-data');
+        var data = {};
+        try {
+          data = JSON.parse(dataEl.textContent);
+          console.log("Graph Data Parsed:", data);
+        } catch (e) {
+          console.error("Error parsing graph data", e);
+        }
+
+        if (typeof NetworkGraph === 'undefined') {
+          console.error("NetworkGraph library not loaded!");
+          document.getElementById('network-graph').innerHTML = '<p style="color:red; text-align:center; padding:40px;">Error: Graph library not loaded.</p>';
+          return;
+        }
+
+        if (data.nodes && data.nodes.length > 0) {
+          console.log("Initializing NetworkGraph...");
+          NetworkGraph.initWithData('#network-graph', data);
+        } else {
+          console.warn("No nodes in graph data");
+          document.getElementById('network-graph').innerHTML =
+            '<p style="color:var(--color-text-muted); text-align:center; padding:60px 20px;">Submit the questionnaire to see your interactive network graph.</p>';
+        }
+      })();
+    </script>
+
+  </div>
+
+  <div class="container">
+    <footer>
+      <div class="footer-left">
+        &copy; 2026 Ezra's Network Visualize. All rights reserved.
+      </div>
+      <div class="footer-right">
+        Built for mapping and exploring professional networks.
+      </div>
+    </footer>
+  </div>
+</body>
+
+</html>

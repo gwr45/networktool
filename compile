@@ -1,0 +1,1 @@
+babel static/js/src -d static/js/lib; browserify static/js/lib/index.js -o static/js/lib/bundle.js

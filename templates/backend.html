@@ -1,0 +1,88 @@
+<html>
+
+<head>
+    <title>Admin — Ezra's Network</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/index.css" />
+</head>
+
+<body>
+    <div class="nav">
+        <div class="nav-logo">
+            <span class="dot">E</span>
+            <h1>Ezra's Network Visualize</h1>
+        </div>
+        <div class="nav-links">
+            <a href="/" class="nav-link">Survey</a>
+            <a href="/backend" class="nav-link active">Admin</a>
+        </div>
+    </div>
+
+    <div class="container" style="padding-top:var(--sp-8); padding-bottom:var(--sp-16);">
+
+        <div class="admin-header">
+            <h3 style="margin:0; border:0; padding:0;">Submissions</h3>
+            <div class="admin-actions">
+                <a class="btn btn-secondary" href="/data/results">📥 Results CSV</a>
+                <a class="btn btn-secondary" href="/data/connections">📥 Connections CSV</a>
+                <a class="btn btn-secondary" href="/data/matrices">📥 Matrix CSV</a>
+                <a class="btn btn-primary"
+                    href="https://docs.google.com/a/cornell.edu/document/d/1CizPYjp5q8sBQTPoRG6G494dUP_Mv4YNqQgQBGyqD6I/edit?usp=sharing">📖
+                    Manual</a>
+            </div>
+        </div>
+
+        <div class="admin-search">
+            <input type="text" id="search-input" placeholder="Search by name..." oninput="filterTable(this.value)">
+        </div>
+
+        <div class="card" style="overflow-x:auto;">
+            <table class="table" id="results-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Submitted</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in results %}
+                    <tr data-name="{{ result.name|lower }}">
+                        <td style="font-weight:600;">{{ result.name }}</td>
+                        <td style="color:var(--color-text-muted);">{{ result.created_at }}</td>
+                        <td>
+                            <div style="display:flex; gap:var(--sp-2);">
+                                <a href="/show/{{ result.id }}" class="btn btn-secondary"
+                                    style="padding:var(--sp-2) var(--sp-4); font-size:var(--font-size-xs);">📊 Chart</a>
+                                <a href="/visualize/{{ result.id }}" class="btn btn-secondary"
+                                    style="padding:var(--sp-2) var(--sp-4); font-size:var(--font-size-xs);">🗺️ Map</a>
+                                <a href="/printout/{{ result.id }}" class="btn btn-ghost"
+                                    style="padding:var(--sp-2) var(--sp-4); font-size:var(--font-size-xs);">📄
+                                    Export</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function filterTable(query) {
+            const rows = document.querySelectorAll('#results-table tbody tr');
+            const q = query.toLowerCase().trim();
+            rows.forEach(row => {
+                const name = row.getAttribute('data-name') || '';
+                row.style.display = name.includes(q) ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+
+</html>
